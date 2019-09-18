@@ -3,9 +3,32 @@ body{
   background-color: #284165;
 }
 
+.react-transition-enter {
+  opacity: 0;
+  transform: translateX(200px);
+}
+.react-transition-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition: all 350ms;
+}
+
+.react-transition-exit {
+  opacity: 1;
+}
+.react-transition-exit-active {
+  opacity: 0;
+  transform: translateX(-200px);
+  transition: all 350ms;
+}
+
 @keyframes fieldmarked {
+  0%{
+    opacity: 1;
+  }
   100% {
-    stroke-dashoffset: 0;
+    opacity: 1;
+    stroke-dashoffset: 0px;
   }
 }
 @keyframes fieldwinned {
@@ -21,10 +44,11 @@ body{
 
 .path{
   animation: fieldmarked 1s ease-out forwards;
-	stroke-dasharray: 33;
-	stroke-dashoffset: 33;
+	stroke-dasharray: 40px;
+	stroke-dashoffset: 40px;
 }
 #path2{
+  opacity: 0;
   animation-delay: 1s;
 }
 

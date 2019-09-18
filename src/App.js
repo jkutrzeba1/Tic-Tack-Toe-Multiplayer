@@ -3,6 +3,8 @@ import ReactLoading from 'react-loading';
 import io from 'socket.io-client';
 import logo from './logo.svg';
 import SVG from 'react-inlinesvg';
+import { CSSTransition } from 'react-transition-group';
+import { SwitchTransition } from 'react-transition-group';
 
 import './App.css';
 
@@ -243,38 +245,42 @@ class WelcomePage extends React.Component {
       this.input = React.createRef();
     }
 
-    searchOpponent = ()=>{
+    searchOpponent = (e)=>{
       this.setState({
         searchActive: true
       })
 
       this.props.onSearchOpponentStart(this.input.current.value);
 
+      e.preventDefault();
+
     }
 
     render(){
 
-      var el = null;
-      if(this.state.searchActive){
-        el = (
-          <div className="loading-panel">
-            <ReactLoading type="spokes" />
-            Oczekiwanie na przeciwnika
-          </div>
-        );
-      }
-      else{
-        el = (
-          <form>
-            <input type="text" placeholder="Login" ref={this.input} />
-            <button onClick={this.searchOpponent}>SZUKAJ PRZECIWNIKA</button>
-          </form>
-        );
-      }
+
+
+      var el_onsearch = (
+        <div key={this.state.searchActive ? "1" : "2"} className="loading-panel">
+          <ReactLoading type="spokes" />
+          Oczekiwanie na przeciwnika
+        </div>
+      );
+
+      var el_beforesearch = (
+        <form key={this.state.searchActive ? "1" : "2"}>
+          <input type="text" placeholder="Login" ref={this.input} />
+          <button onClick={this.searchOpponent}>SZUKAJ PRZECIWNIKA</button>
+        </form>
+      );
 
       return (
         <div className="welcome-page">
-          {el}
+          <SwitchTransition>
+            <CSSTransition key={this.state.searchActive ? "1" : "2"} timeout={350} classNames="react-transition">
+              {this.state.searchActive ? el_onsearch : el_beforesearch }
+            </CSSTransition>
+          </SwitchTransition>
         </div>
       )
 
@@ -354,7 +360,11 @@ class App extends React.Component {
       <div className="app">
         <div className="banner">Tic-Tac-Toe</div>
         {this.state.mark && <OpponentsHeader marker={this.state.mark} loggedAs={this.state.loggedAs} opponentName={this.state.opponentName} />}
-        {el}
+        <SwitchTransition>
+          <CSSTransition key={this.state.gameActive ? "1" : "2"} timeout={350} classNames="react-transition">
+            {el}
+          </CSSTransition>
+        </SwitchTransition>
       </div>
     );
   }
