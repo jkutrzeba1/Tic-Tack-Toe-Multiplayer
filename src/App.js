@@ -230,6 +230,7 @@ class Game extends React.Component {
           <Field handleFieldClick={()=>(this.handleFieldClick(2,1))} val={this.state.fields[2][1]}/>
           <Field handleFieldClick={()=>(this.handleFieldClick(2,2))} val={this.state.fields[2][2]}/>
         </Board>
+        {this.state.winner ? <button className="btn" onClick={this.props.returnToMainPage}>POWRÓT DO STORNY GŁÓWNEJ</button> : null}
       </div>
     );
   }
@@ -270,7 +271,7 @@ class WelcomePage extends React.Component {
       var el_beforesearch = (
         <form key={this.state.searchActive ? "1" : "2"}>
           <input type="text" placeholder="Login" ref={this.input} />
-          <button onClick={this.searchOpponent}>SZUKAJ PRZECIWNIKA</button>
+          <button className="btn" onClick={this.searchOpponent}>SZUKAJ PRZECIWNIKA</button>
         </form>
       );
 
@@ -317,7 +318,7 @@ class App extends React.Component {
       loggedAs: null,
       opponentName: null,
       gameActive: false,
-      marker: null
+      mark: null
     }
 
 
@@ -345,12 +346,25 @@ class App extends React.Component {
 
   }
 
+  returnToMainPage = ()=>{
+
+    this.setState(
+      {
+        loggedAs: null,
+        opponentName: null,
+        gameActive: false,
+        mark: null
+      }
+    );
+
+  }
+
   render(){
 
     var el = null;
 
     if(this.state.gameActive){
-      el = <Game mark={this.state.mark}/>
+      el = <Game mark={this.state.mark} returnToMainPage={this.returnToMainPage}/>
     }
     else{
       el = <WelcomePage onSearchOpponentStart={this.onSearchOpponentStart}/>
